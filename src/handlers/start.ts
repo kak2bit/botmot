@@ -1,48 +1,87 @@
-import TelegramService from "../services/TelegramService";
-import UserService from "../services/UserService";
 import type { Env } from "../types/env";
-import mainKeyboard from "../keyboards/main";
-import StateService from "../services/StateService";
-import { States } from "../constants/states";
-import { Buttons } from "../constants/buttons";
 
-export default async function (
-    env: Env,
-    update: any
-) {
+export default class TelegramService {
+    private token: string;
 
-    const telegram = new TelegramService(env);
-
-    const users = new UserService(env);
-
-    await users.register(
-        update.message.from,
-        env.ADMIN_ID
-    );
-
-    const state = new StateService(env);
-
-    await state.set(
-        update.message.from.id,
-        States.MAIN
-    );
-
-    const keyboard = mainKeyboard();
-
-    if (update.message.from.id.toString() === env.ADMIN_ID) {
-        keyboard.keyboard.push([
-            {
-                text: Buttons.ADMIN
-            }
-        ]);
+    constructor(env: Env) {
+        this.token = env.BOT_TOKEN;
     }
 
-    await telegram.sendMessage(
-        update.message.chat.id,
-        `سلام ${update.message.from.first_name} 🌹
+    private async request(method: string, payload: any) {
+        const url = `https://api.telegram.org/bot${this.token}/${method}`;
 
-به ربات خوش آمدید.`,
-        keyboard
-    );
+        console.log("📤 TELEGRAM REQUEST:", method, payload);
 
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const data = await res.json();
+
+        console.log("📥 TELEGRAM RESPONSE:", data);
+
+        if (!data.ok) {
+            console.log("❌ TELEGRAM ERROR:", data);
+        }
+
+        return data;
+    }
+
+    // =========================
+    // SEND MESSAGE
+    // =========================
+    async sendMessage(
+        chatId: number | string,
+        text: string,
+        keyboard?: any
+    ) {
+        return this.request("sendMessage", {
+            chat_id: chatId,
+            text,
+            parse_mode: "HTML",
+            reply_markup: keyboard,
+        });
+    }
+
+    // =========================
+    // EDIT MESSAGE
+    // =========================
+    async editMessage(
+        chatId: number | string,
+        messageId: number,
+        text: string,
+        keyboard?: any
+    ) {
+        return this.request("editMessageText", {
+            chat_id: chatId,
+            message_id: messageId,
+            text,
+            parse_mode: "HTML",
+            reply_markup: keyboard,
+        });
+    }
+
+    // =========================
+    // ANSWER CALLBACK
+    // =========================
+    async answerCallback(callbackQueryId: string, text?: string) {
+        return this.request("answerCallbackQuery", {
+            callback_query_id: callbackQueryId,
+            text,
+        });
+    }
+
+    // =========================
+    // DELETE MESSAGE
+    // =========================
+    async deleteMessage(chatId: number | string, messageId: number) {
+        return this.request("deleteMessage", {
+            chat_id: chatId,
+            message_id: messageId,
+        });
+    }
 }

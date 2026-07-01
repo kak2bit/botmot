@@ -2,33 +2,29 @@ import { Env } from "./types/env";
 import router from "./router";
 
 export default {
+    async fetch(request: Request, env: Env) {
 
-    async fetch(
-
-        request: Request,
-
-        env: Env
-
-    ) {
+        console.log("🔥 WEBHOOK HIT");
 
         if (request.method !== "POST") {
-
             return new Response("OK");
-
         }
 
-        const update = await request.json();
+        try {
+            const update = await request.json();
 
-        await router(
+            console.log("📩 UPDATE:", JSON.stringify(update, null, 2));
 
-            env,
+            await router(env, update);
 
-            update
+            console.log("✅ ROUTER DONE");
 
-        );
+            return new Response("ok");
 
-        return new Response("ok");
+        } catch (err) {
+            console.log("❌ ERROR IN WEBHOOK:", err);
 
+            return new Response("error", { status: 500 });
+        }
     }
-
-}
+};
