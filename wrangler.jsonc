@@ -1,0 +1,12 @@
+{
+	"name": "telegram-worker",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-07-01",
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "telegram",
+			"database_id": "d6497987-93ff-49df-9861-fae5c2e049e0"
+		}
+	]
+}

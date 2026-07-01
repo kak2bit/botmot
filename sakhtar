@@ -1,0 +1,80 @@
+src/
+│
+├── constants/
+│   ├── buttons.ts
+│   ├── commands.ts
+│   └── states.ts
+│
+├── database/
+│   ├── migrations/
+│   │   ├── 001_init.sql
+│   │   ├── 002_seed.sql
+│   │   └── README.md
+│   └── Database.ts
+│
+├── handlers/
+│   ├── start.ts
+│   ├── message.ts
+│   ├── callback.ts
+│   ├── admin.ts
+│   ├── config.ts
+│   ├── support.ts
+│   └── payment.ts
+│
+├── keyboards/
+│   ├── main.ts
+│   ├── admin.ts
+│   ├── config.ts
+│   ├── support.ts
+│   └── payment.ts
+│
+├── middlewares/
+│   ├── admin.ts
+│   ├── state.ts
+│   └── user.ts
+│
+├── models/
+│   ├── User.ts
+│   ├── Config.ts
+│   ├── Setting.ts
+│   ├── Support.ts
+│   ├── SupportMessage.ts
+│   └── UserState.ts
+│
+├── repositories/
+│   ├── BaseRepository.ts
+│   ├── UserRepository.ts
+│   ├── ConfigRepository.ts
+│   ├── SettingRepository.ts
+│   ├── SupportRepository.ts
+│   ├── SupportMessageRepository.ts
+│   └── UserStateRepository.ts
+│
+├── services/
+│   ├── TelegramService.ts
+│   ├── UserService.ts
+│   ├── ConfigService.ts
+│   ├── SupportService.ts
+│   ├── AdminService.ts
+│   ├── SettingService.ts
+│   └── StateService.ts
+│
+├── telegram/
+│   ├── api.ts
+│   ├── request.ts
+│   ├── response.ts
+│   └── update.ts
+│
+├── types/
+│   ├── env.ts
+│   ├── telegram.ts
+│   └── database.ts
+│
+├── utils/
+│   ├── keyboard.ts
+│   ├── helpers.ts
+│   ├── validator.ts
+│   └── date.ts
+│
+├── index.ts
+└── router.ts
